@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Query, Path
-from schemas import Book
+from fastapi import FastAPI, Query, Path, Body
+from schemas import Book, Author
 from typing import List
 
 
@@ -22,9 +22,14 @@ app = FastAPI()
 
 
 @app.post('/book')
-def create_book(item: Book):
-    return item
+def create_book(item: Book, author: Author, quantity: int = Body(...)):
+    return {"item": item, "author": author, "quantity": quantity}
 
+
+# embed - used to include key ex. "author" to request body
+@app.post('/author')
+def create_author(author: Author = Body(..., embed=True)):
+    return {"author": author}
 
 # (...) - Means that query is required
 @app.get('/book')
