@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Path
 from schemas import Book
 from typing import List
 
@@ -30,3 +30,10 @@ def create_book(item: Book):
 @app.get('/book')
 def get_book(q: List[str] = Query(['text', 'text_2'], min_length=2, max_length=5, description='Write some text...', depricated=True)):
     return q
+
+
+# Path - used to validate path (url)
+# Query - used to validate query parameter
+@app.get('/book/{pk}')
+def get_single_book(pk: int = Path(..., gt=1, le=25), pages: int = Query(None, gt=10, le=500)):
+    return {"pk": pk, "pages": pages}
